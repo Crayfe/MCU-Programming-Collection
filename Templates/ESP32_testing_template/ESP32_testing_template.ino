@@ -14,9 +14,12 @@
         +   Pulsador 2      ->  33
         +   Pulsador 3      ->  32
     - 4 pines de entrada digital para encoder rotativo
-        +   CLK             ->  1
-        +   DT              ->  1
-        +   SW              ->  1
+        +   CLK             ->  27
+        +   DT              ->  14
+        +   SW              ->  12
+          *ENCODER SIN IMPLEMENTAR. Han ido surguiendo problemas
+          *con las pruebas y no se ha conseguido hacer funcionar
+          *el encoder correctamente
     - 1 pin de salida digital para buzzer
         +   Sonido piezo    ->  26
     - 2 pines para bus de datos i2c (sda y scl) para display
@@ -50,24 +53,33 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
 
 /*
- *  Para generar tonos con el buzzer piezoelectrico necesitamo
+ *  Para generar tonos con el buzzer piezoelectrico necesitamoq
  *  definir el pin de la señal y seleccionar un canal PWM
  */
-const int TONE_OUTPUT_PIN = 26;
-const int TONE_PWM_CHANNEL = 0;
+#define TONE_OUTPUT_PIN 26
+#define TONE_PWM_CHANNEL 0
 
 /*
- *  Los pines de los pulsadores
+ *  Definimos los pines de los pulsadores
  */
-const int BTN1_PIN = 25;
-const int BTN2_PIN = 33;
-const int BTN3_PIN = 32;
+#define BTN1_PIN 25
+#define BTN2_PIN 33
+#define BTN3_PIN 32
+
+/*
+ *  Definimos los pines que necesita el encoder rotativo
+ */
+#define CLK_PIN 27
+#define DT_PIN 14
+#define SW_PIN 12
 
 void setup() {
   
   /*  
    *  En el caso de que queramos realizar comprobaciones mendiante 
-   *  comunicaciones serie iniciamos el mismo
+   *  comunicaciones serie iniciamos el mismo. 
+   *  
+   *  El ESP32 puede enviar mensajes a 115200 baudios
    */
    
   Serial.begin(9600);
@@ -89,14 +101,20 @@ void setup() {
     *     Botón pulsado     ->    0
     *  
     */
+    
    pinMode(BTN1_PIN, INPUT_PULLUP);
    pinMode(BTN2_PIN, INPUT_PULLUP);
    pinMode(BTN3_PIN, INPUT_PULLUP);
+   
+   /*
+    *  Inicializamos los pines del encoder (Pendiente implementar) 
+    * 
+    */
 
 }
 
 void loop() {
-  test_buttons();
+  //test_buttons();
   //test_display();
   //test_tones_holded();
   delay(2000);
