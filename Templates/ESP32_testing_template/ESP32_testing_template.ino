@@ -73,6 +73,14 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 #define DT_PIN 14
 #define SW_PIN 12
 
+/*  
+ *  Variables auxiliares necesarias para el encoder 
+ */
+int cursor = 0;
+int st_clk;
+int last_st_clk;
+
+
 void setup() {
   
   /*  
@@ -107,22 +115,55 @@ void setup() {
    pinMode(BTN3_PIN, INPUT_PULLUP);
    
    /*
-    *  Inicializamos los pines del encoder (Pendiente implementar) 
-    * 
+    *  Inicializamos los pines del encoder y su estado previo
     */
+   pinMode(CLK_PIN,INPUT);
+   pinMode(DT_PIN,INPUT);
+   pinMode(SW_PIN, INPUT_PULLUP);
+   Serial.begin(9600);
+   last_st_clk = digitalRead(CLK_PIN);   //Cargamos el estado inicial y previo del pin CLK
 
 }
 
 void loop() {
-  //test_buttons();
+  test_encoder();
+  //test_buttons_state();
+  test_buttons_pulsed();
   //test_display();
+  //test_tones();
   //test_tones_holded();
-  delay(2000);
+  //delay(2000);
 }
 /*
- *  Funcion para probar la correcta lectura de los pulsadores
+ *    FUNCIONES DE TESTING
  */
-void test_buttons(){
+
+/*
+ *  Funcion para probar la correcta lectura y manejo del encoder
+ */
+void test_encoder(){
+  st_clk = digitalRead(CLK_PIN);
+  if(st_clk != last_st_clk){
+      if (digitalRead(DT_PIN) != st_clk){
+        ++cursor;
+      }else{
+        --cursor;
+      }
+      Serial.print("Cursor: ");
+      Serial.println(cursor);
+   }
+  last_st_clk = st_clk;       // Mantenemos el último valor
+  bool sw = digitalRead(SW_PIN);
+  if(!sw){
+    Serial.println("Encoder pulsado");
+    delay(200);               // Retardo para descartar rebotes y falsos pulsados
+  }
+}
+
+/*
+ *  Funciones para probar la correcta lectura de los pulsadores
+ */
+void test_buttons_state(){
   bool btn_state;
   Serial.print("Pulsador 1:");
   btn_state = digitalRead(BTN1_PIN);
@@ -135,13 +176,26 @@ void test_buttons(){
   Serial.println(btn_state);
   delay(1000);    
 }
+void test_buttons_pulsed(){
+  if(digitalRead(BTN1_PIN) == LOW){
+    Serial.println("bt1 pulsado"); 
+    delay(200);
+  }
+  if(digitalRead(BTN2_PIN) == LOW){
+    Serial.println("bt2 pulsado");
+    delay(200); 
+  }
+  if(digitalRead(BTN3_PIN) == LOW){
+    Serial.println("bt3 pulsado");
+    delay(200); 
+  }
+}
 
 /*
  *  Funciones para probar la reproducción de diferentes tonos con el
  *  buzzer
  */
  void test_tones(){
-  
   ledcAttachPin(TONE_OUTPUT_PIN, TONE_PWM_CHANNEL);
   ledcWriteNote(TONE_PWM_CHANNEL, NOTE_D, 4);
   delay(500);
@@ -176,11 +230,10 @@ void test_buttons(){
   ledcWriteNote(TONE_PWM_CHANNEL, NOTE_C, 5);
   delay(500);
   ledcDetachPin(TONE_OUTPUT_PIN);
-  delay(250);
-  
+  delay(250); 
  }
+ 
  void test_tones_holded(){
-  
   ledcAttachPin(TONE_OUTPUT_PIN, TONE_PWM_CHANNEL);
   ledcWriteNote(TONE_PWM_CHANNEL, NOTE_D, 4);
   delay(500);
@@ -197,14 +250,12 @@ void test_buttons(){
   ledcWriteNote(TONE_PWM_CHANNEL, NOTE_C, 5);
   delay(500);
   ledcDetachPin(TONE_OUTPUT_PIN);
-  
  }
  /*
   *  Funcion para probar diferentes representaciones en el Display
   */
  void test_display(){
   display.clearDisplay();
-
   display.setTextSize(1);      // Normal 1:1 pixel
   display.setTextColor(SSD1306_WHITE);
   display.setCursor(0, 0);
@@ -228,5 +279,4 @@ void test_buttons(){
   display.print(F("0x")); display.println("CRAYFE");
   display.display();
   delay(2000);
-  
  }
