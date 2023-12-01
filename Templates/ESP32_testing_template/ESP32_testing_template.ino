@@ -1,4 +1,5 @@
 /*      ESP32_TESTING_TEMPLATE
+       
   Plantilla para usar la placa Az-Delivery ESP32-WROOM-32 junto 
   con placa de desarrollo personal (by Crayfe)
 
@@ -17,9 +18,6 @@
         +   CLK             ->  27
         +   DT              ->  14
         +   SW              ->  12
-          *ENCODER SIN IMPLEMENTAR. Han ido surguiendo problemas
-          *con las pruebas y no se ha conseguido hacer funcionar
-          *el encoder correctamente
     - 1 pin de salida digital para buzzer
         +   Sonido piezo    ->  26
     - 2 pines para bus de datos i2c (sda y scl) para display
