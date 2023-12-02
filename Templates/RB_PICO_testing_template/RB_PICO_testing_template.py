@@ -11,15 +11,15 @@
 
   Pines necesarios y asignación:
     - 1 pin de entrada digital por cada pulsador
-        +   Pulsador 1      ->  0
-        +   Pulsador 2      ->  0
-        +   Pulsador 3      ->  0
+        +   Pulsador 1      ->  GP22
+        +   Pulsador 2      ->  GP21
+        +   Pulsador 3      ->  GP20
     - 4 pines de entrada digital para encoder rotativo
         +   CLK             ->  GP4
         +   DT              ->  GP3
         +   SW              ->  GP2
     - 1 pin de salida digital para buzzer
-        +   Sonido piezo    ->  0
+        +   Sonido piezo    ->  0 (PENDIENTE DE PRUEBA Y ASIGNACIÓN)
     - 2 pines para bus de datos i2c (sda y scl) para display
         +   SDA             ->  GP0
         +   SCL             ->  GP1
@@ -49,16 +49,22 @@ encoder_sw = digitalio.DigitalInOut(board.GP2)
 encoder_sw.direction = digitalio.Direction.INPUT
 encoder_sw.pull = digitalio.Pull.UP
 
+#Variables auxiliares
+cursor = 0
+#st_clk
+#Leemos el estado inicial del pin clk
+last_st_clk = encoder_clk.value
+
 #Configuración de los pulsadores
-BTN1_PIN = digitalio.DigitalInOut(board.GP2)
+BTN1_PIN = digitalio.DigitalInOut(board.GP22)
 BTN1_PIN.direction = digitalio.Direction.INPUT
 BTN1_PIN.pull = digitalio.Pull.UP
 
-BTN2_PIN = digitalio.DigitalInOut(board.GP2)
+BTN2_PIN = digitalio.DigitalInOut(board.GP21)
 BTN2_PIN.direction = digitalio.Direction.INPUT
 BTN2_PIN.pull = digitalio.Pull.UP
 
-BTN3_PIN = digitalio.DigitalInOut(board.GP2)
+BTN3_PIN = digitalio.DigitalInOut(board.GP20)
 BTN3_PIN.direction = digitalio.Direction.INPUT
 BTN3_PIN.pull = digitalio.Pull.UP
 
