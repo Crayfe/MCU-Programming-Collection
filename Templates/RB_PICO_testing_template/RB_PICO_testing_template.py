@@ -19,7 +19,7 @@
         +   DT              ->  GP3
         +   SW              ->  GP2
     - 1 pin de salida digital para buzzer
-        +   Sonido piezo    ->  0 (PENDIENTE DE PRUEBA Y ASIGNACIÓN)
+        +   Sonido piezo    ->  GP5
     - 2 pines para bus de datos i2c (sda y scl) para display
         +   SDA             ->  GP0
         +   SCL             ->  GP1

@@ -20,6 +20,8 @@
         +   SW              ->  12
     - 1 pin de salida digital para buzzer
         +   Sonido piezo    ->  26
+    - 1 pin de propósito general (Para un DGTxx por ejemplo
+        +   DHTxx           ->  4
     - 2 pines para bus de datos i2c (sda y scl) para display
         +   SDA             ->  21
         +   SCL             ->  22
