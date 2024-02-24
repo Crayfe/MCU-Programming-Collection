@@ -8,6 +8,7 @@
     - 1 encoder rotativo HW-040
     - 1 buzzer CEM-1203(42)
     - 1 Display OLED basado en el chip ssd1306 de 128x64 pixeles
+    - 1 Pin de datos para dispositivos tipo DHTxx o Dallas
 
   Pines necesarios y asignación:
     - 1 pin de entrada digital por cada pulsador
@@ -20,7 +21,7 @@
         +   SW              ->  12
     - 1 pin de salida digital para buzzer
         +   Sonido piezo    ->  26
-    - 1 pin de propósito general (Para un DGTxx por ejemplo
+    - 1 pin para leer datos de un sensor digital (Para un DGTxx por ejemplo
         +   DHTxx           ->  4
     - 2 pines para bus de datos i2c (sda y scl) para display
         +   SDA             ->  21
