@@ -29,6 +29,7 @@ void loop() {
   if (isnan(humedad) || isnan(temperatura)) {
     Serial.print("Fallo de lectura del sensor DHT");
     Serial.println(DHTTYPE);
+    delay(2000);
     return;
   }
   Serial.print("Humedad: ");

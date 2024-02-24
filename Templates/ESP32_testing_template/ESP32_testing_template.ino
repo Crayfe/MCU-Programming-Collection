@@ -30,8 +30,9 @@
            y los pines de datos se establecen por defecto
 */
 
+
 /*  
- *          VARIABLES Y DEFINICIONES NECESARIAS 
+ *          LIBRERÍAS NECESARIAS 
  *  para hacer funcionar los componentes anteriormente mencionados.
  */
 
@@ -46,12 +47,25 @@
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
 
+/*
+ *  Para utilizar un sensor DHTxx
+ */
+ 
+#include "DHT.h"
+
+/*  
+ *          VARIABLES Y DEFINICIONES NECESARIAS 
+ *  para hacer funcionar los componentes anteriormente mencionados.
+ */
+
+/*
+ *  Para display OLED I2C
+ */
 #define SCREEN_WIDTH 128 // El ancho del display en pixeles
 #define SCREEN_HEIGHT 64 // El alto del display en pixeles
 #define OLED_RESET -1
 #define SCREEN_ADDRESS 0x3C // La dirección i2c del display
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
-
 
 /*
  *  Para generar tonos con el buzzer piezoelectrico necesitamoq
@@ -74,6 +88,15 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 #define DT_PIN 14
 #define SW_PIN 12
 
+/*
+ *  Definimos un pin para leer un sensor DHTxx
+ */
+#define DHTPIN 4
+#define DHTTYPE DHT22
+DHT dht(DHTPIN, DHTTYPE);
+float humedad;
+float temperatura;
+
 /*  
  *  Variables auxiliares necesarias para el encoder 
  */
@@ -92,16 +115,17 @@ void setup() {
    */
    
   Serial.begin(9600);
-  
+  dht.begin();
   /*  
    *  Si se va a utilizar el display comprobamos que este funcione.
    *  En el caso de que no funcionase se notifica por el puerto serie
    */
-/*   
+   
    if(!display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS))
      Serial.println(F("SSD1306 allocation failed"));
    display.clearDisplay();  //Borramos el splash screen de Adafruit
-*/ 
+   display.display();
+ 
    /*
     *  Inicializamos los pulsadores, que deben programarse para
     *  que funcionen con las resistencias pull-up internas. De este
@@ -110,29 +134,31 @@ void setup() {
     *     Botón pulsado     ->    0
     *  
     */
-    
+/*   
    pinMode(BTN1_PIN, INPUT_PULLUP);
    pinMode(BTN2_PIN, INPUT_PULLUP);
    pinMode(BTN3_PIN, INPUT_PULLUP);
-   
+*/
    /*
     *  Inicializamos los pines del encoder y su estado previo
     */
+/*
    pinMode(CLK_PIN,INPUT);
    pinMode(DT_PIN,INPUT);
    pinMode(SW_PIN, INPUT_PULLUP);
    Serial.begin(9600);
    last_st_clk = digitalRead(CLK_PIN);   //Cargamos el estado inicial y previo del pin CLK
-
+*/
 }
 
 void loop() {
-  test_encoder();
+  //test_encoder();
   //test_buttons_state();
-  test_buttons_pulsed();
+  //test_buttons_pulsed();
   //test_display();
   //test_tones();
   //test_tones_holded();
+  test_dht(true);
   //delay(2000);
 }
 /*
@@ -255,6 +281,38 @@ void test_buttons_pulsed(){
  /*
   *  Funcion para probar diferentes representaciones en el Display
   */
+ void test_dht(bool OLED){
+  humedad = dht.readHumidity();
+  temperatura = dht.readTemperature();
+  //Verificamos datos válidos
+  if (isnan(humedad) || isnan(temperatura)) {
+    Serial.print("Fallo de lectura del sensor DHT");
+    Serial.println(DHTTYPE);
+    delay(2000);
+    return;
+  }
+  if(!OLED){
+    Serial.print("Humedad: ");
+    Serial.print(humedad);
+    Serial.print("% Temperatura: ");
+    Serial.print(temperatura);
+    Serial.println("ºC");
+  }else{
+    display.clearDisplay();
+    display.cp437(true);
+    display.setTextSize(3);
+    display.setTextColor(SSD1306_WHITE);
+    display.setCursor(0, 5);
+    display.print(temperatura);
+    display.print(char(9));
+    display.println("C");
+    display.setCursor(10, 35);
+    display.print(humedad);
+    display.println("%");
+    display.display();
+  }
+    delay(2000);        //Esperamos 2 segundos
+ }
  void test_display(){
   display.clearDisplay();
   display.setTextSize(1);      // Normal 1:1 pixel
