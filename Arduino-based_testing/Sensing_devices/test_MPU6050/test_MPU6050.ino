@@ -13,8 +13,8 @@
 #define accXYZ  0x3B    //Direccion de memoria donde se leen las acereraciones de los ejes xyz
 #define girXYZ  0x43    //Direccion de memoria donde se leen los giros de los ejes xyz
 
-int16_t accX, accY, accZ;  //variables de 16 bits donde almacenar las lecturas de aceleración
-int16_t girX, girY, girZ;  //variables de 16 bits donde almacenar las lecturas de giro
+int16_t accX, accY, accZ;  //variables de 16 bits con signo donde almacenar las lecturas de aceleración
+int16_t girX, girY, girZ;  //variables de 16 bits con signo donde almacenar las lecturas de giro
 
 void setup(void){
   Serial.begin(9600);
