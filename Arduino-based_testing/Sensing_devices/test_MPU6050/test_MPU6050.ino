@@ -13,8 +13,8 @@
 #define accXYZ  0x3B    //Direccion de memoria donde se leen las acereraciones de los ejes xyz
 #define girXYZ  0x43    //Direccion de memoria donde se leen los giros de los ejes xyz
 
-long accX, accY, accZ;  //variables de 16 bits donde almacenar las lecturas de aceleración
-long girX, girY, girZ;  //variables de 16 bits donde almacenar las lecturas de giro
+int16_t accX, accY, accZ;  //variables de 16 bits donde almacenar las lecturas de aceleración
+int16_t girX, girY, girZ;  //variables de 16 bits donde almacenar las lecturas de giro
 
 void setup(void){
   Serial.begin(9600);
@@ -67,11 +67,11 @@ void loop(){
 
   Serial.println("Acceleration:");
   Serial.print("X: ");
-  Serial.println((accX/16384.0) - 2);
+  Serial.println(((float)accX/16384.0));
   Serial.print("Y: ");
-  Serial.println((accY/16384.0) - 2);
+  Serial.println(((float)accY/16384.0));
   Serial.print("Z: ");
-  Serial.println((accZ/16384.0) - 2);
+  Serial.println(((float)accZ/16384.0));
 
   Serial.println("Rotation:");
   Serial.print("X: ");
@@ -80,7 +80,7 @@ void loop(){
   Serial.println((girY/131.0));
   Serial.print("Z: ");
   Serial.println((girZ/131.0));
-  delay(500);
+  delay(2000);
   
 
  
