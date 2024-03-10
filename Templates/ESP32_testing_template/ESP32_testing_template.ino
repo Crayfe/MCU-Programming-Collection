@@ -158,7 +158,7 @@ void loop() {
   //test_display();
   //test_tones();
   //test_tones_holded();
-  test_dht(true);
+  //test_dht(true);
   //delay(2000);
 }
 /*
