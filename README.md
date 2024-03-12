@@ -1,7 +1,7 @@
-# Embedded-Testing-Codes
-En este repositorio recopilo programas pequeños de baja complejidad enfocados para testear el funcionamiento de diversas funcionalidades destinadas para proyectos con sistemas embebidos basados en Arduino, Raspberry Pi, MicroPython/CircuitPython, y demás.
+# MCU Programming Collection
+En este repositorio recopilo una colección de modestos programas enfocados para testear el funcionamiento de diversas funcionalidades con MCUs basados en Arduino, Raspberry Pi, MicroPython/CircuitPython, y demás. Este repositorio me sirve a mí (@Crayfe) para tener todos mis programas mejor organizados y documentados, además de no perder nada y tampoco perder tiempo repitiendo los mismos pasos a medida que voy cacharreando. Además, tal vez la persona que lea esto encuentre algo que le llame la atención y le sea útil también.
 
-El código está separado en los directorios **Templates**, **Arduino-based_testing** y **Python-based testing**, dependiendo del lenguaje y hardware utilizado para cada prueba.
+El código está separado en los directorios **Plantillas para Dev-board**, **Programación basada en Arduino** y **Programación basada en Python**, dependiendo del lenguaje y hardware utilizado para cada prueba.
 
 ## Plantillas para Dev-board
 Con el objetivo de agilizar todo tipo de pruebas de funcionalidades e integración de estas en un mismo sitio se ha diseñado una placa para prototipado. Esta placa pretende ser compatible con una dev-board basada en **ESP32** y una **Raspberry Pi PICO**. 
