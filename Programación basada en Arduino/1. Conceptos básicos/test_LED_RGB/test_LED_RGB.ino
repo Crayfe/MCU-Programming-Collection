@@ -25,27 +25,27 @@
   * IMPORTANTE: En los ESP el manejo de los pines con PWM varía con respecto a un Arduino
   */
 
-#define rLEDpin 11     //Anodo led rojo
-#define bLEDpin 10     //Anodo led azul
-#define gLEDpin 9      //Anodo led verde
+#define rLEDpin 21     //Anodo led rojo
+#define bLEDpin 19     //Anodo led azul
+#define gLEDpin 18     //Anodo led verde
 
 #define frec 5000   //frecuecia del PWM. En ESP32 se admite desde 1-40000Khz
-#define chan0 0   //Canal PWM
-#define chan1 1   //Canal PWM 
-#define chan2 2   //Canal PWM  
+#define redChan 0   //Canal PWM
+#define blueChan 1   //Canal PWM 
+#define greenChan 2   //Canal PWM  
 #define res 8       //Resolución PWM
 
 void setup(){
 // configuración para esp32
 
-ledcSetup(chan0, frec, res);
-ledcAttachpin(rLEDpin, channel);
+ledcSetup(redChan, frec, res);
+ledcAttachPin(rLEDpin, redChan);
 
-ledcSetup(chan1, frec, res);
-ledcAttachpin(bLEDpin, channel);
+ledcSetup(blueChan, frec, res);
+ledcAttachPin(bLEDpin, blueChan);
 
-ledcSetup(chan2, frec, res);
-ledcAttachpin(gLEDpin, channel);
+ledcSetup(greenChan, frec, res);
+ledcAttachPin(gLEDpin, greenChan);
 
 }
 void loop(){
@@ -55,17 +55,44 @@ void loop(){
   delay(1000);
   singleFade(2);
   delay(1000);
+  crossFade();
+  delay(1000);
 }
 
 void singleFade(int chanPWM){
   //Incremento de brillo
   for(int dutyCycle = 0; dutyCycle <= 255; dutyCycle++){
     ledcWrite(chanPWM, dutyCycle);
-    delay(15);
+    delay(10);
   }
   //Decremento de brillo  
   for(int dutyCycle = 255; dutyCycle >= 0; dutyCycle--){
     ledcWrite(chanPWM,dutyCycle);
-    delay(15);
+    delay(10);
   } 
+}
+void crossFade(){
+  for(int dutyCycle = 0; dutyCycle <= 255; dutyCycle++){
+    ledcWrite(redChan, dutyCycle);
+    ledcWrite(greenChan, 255 - dutyCycle);
+    ledcWrite(blueChan, 0);
+    delay(15);
+  }
+  for(int dutyCycle = 0; dutyCycle <= 255; dutyCycle++){
+    ledcWrite(redChan, 255 - dutyCycle);
+    ledcWrite(greenChan, 0);
+    ledcWrite(blueChan, dutyCycle);
+    delay(15);
+  }
+  for(int dutyCycle = 0; dutyCycle <= 255; dutyCycle++){
+    ledcWrite(redChan, 0);
+    ledcWrite(greenChan, dutyCycle);
+    ledcWrite(blueChan, 255 - dutyCycle);
+    delay(15);
+  }
+  //Limpiamos los canales
+  ledcWrite(redChan, 0);
+  ledcWrite(greenChan, 0);
+  ledcWrite(blueChan, 0);
+  
 }
