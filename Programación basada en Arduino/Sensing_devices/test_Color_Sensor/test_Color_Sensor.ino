@@ -8,41 +8,104 @@
 #include <Wire.h>
 
 #define tcsAddr 0x29    //Dirección I2C del TCS34725
-#define colors 0x14    //Dirección de memoria donde se leen los colores
-#define reset 0x00
+//Direcciones de memoria
+#define ENABLE           0x00    /* Power on - Writing 1 activates the internal oscillator, 0 disables it */
+#define ATIME            0x01    /* Integration time */
+#define CONTROL          0x0F    /* Set the gain level for the sensor */
+#define CDATAL           0x14    /* Clear channel data */
+#define CDATAH           0x15
+#define RDATAL           0x16    /* Red channel data */
+#define RDATAH           0x17
+#define GDATAL           0x18    /* Green channel data */
+#define GDATAH           0x19
+#define BDATAL           0x1A    /* Blue channel data */
+#define BDATAH           0x1B
+
+//Options
+#define ENABLE_PON       0x01    /* Power on - Writing 1 activates the internal oscillator, 0 disables it */
+#define ENABLE_AEN       0x02   /* RGBC Enable - Writing 1 actives the ADC, 0 disables it */
+#define INTEGRATIONTIME_700MS   0x00
+#define GAIN_1X          0x00   /**<  No gain  */
+#define GAIN_60X         0x03   /**<  No gain  */
+#define CMD_Read_Word    0x20     /* RGBC Interrupt flag clear */
 
 
-int8_t H_red, H_green, H_blue;
-int8_t L_red, L_green, L_blue;
+uint16_t red, green, blue, clearance;
+//uint8_t H_red, H_green, H_blue;
+//uint8_t L_red, L_green, L_blue;
 
 void setup(void){
-  Serial.begin();
+  Serial.begin(115200);
   Wire.begin();
-  
-  //Reset del sensor de colores
+    //TSC34725 init
   Wire.beginTransmission(tcsAddr);
-  Wire.write(reset);
-  Wire.write(0x00);
+  Wire.write(ENABLE | 0x80);
+  Wire.write(ENABLE_PON);
   Wire.endTransmission();
+  delay(3)
+  Wire.beginTransmission(tcsAddr);
+  Wire.write(ENABLE | 0x80);
+  Wire.write(ENABLE_PON | ENABLE_AEN);
+  Wire.endTransmission();
+  
+  //TSC34725 Set integration time
+  Wire.beginTransmission(tcsAddr);
+  Wire.write(ATIME | 0x80);
+  Wire.write(INTEGRATIONTIME_700MS);
+  Wire.endTransmission();
+  
+  //TSC34725 Set gain
+  Wire.beginTransmission(tcsAddr);
+  Wire.write(CONTROL | 0x80);
+  Wire.write(GAIN_1X  & 0xFF);
+  Wire.endTransmission();
+  
 
-  //Configuración adicional
-  
-  
-  
-  
-  
-  
 }
 void loop(){
-  //Leemos los registros donde se almacenan los colores
+  //Leemos clear
   Wire.beginTransmission(tcsAddr);
-  Wire.write(colors);               //Nos situamos en la dirección donde se empiezan a leer los colores               
+  Wire.write(CDATAL | 0x80);               //Nos situamos en la dirección donde se empiezan a leer los colores               
   Wire.endTransmission();
+  Wire.requestFrom(tcsAddr,2);      
+  while(Wire.available() < 2);      
+  clearance =  (Wire.read() << 8) | (Wire.read() & 0xFF);
+
+  //leemos red
+  Wire.beginTransmission(tcsAddr);
+  Wire.write(RDATAL | 0x80);               //Nos situamos en la dirección donde se empiezan a leer los colores               
+  Wire.endTransmission();
+  Wire.requestFrom(tcsAddr,2);      
+  while(Wire.available() < 2);      
+  red =  (Wire.read() << 8) | (Wire.read() & 0xFF);
+
+  //leemos green
+   Wire.beginTransmission(tcsAddr);
+  Wire.write(GDATAL | 0x80);               //Nos situamos en la dirección donde se empiezan a leer los colores               
+  Wire.endTransmission();
+  Wire.requestFrom(tcsAddr,2);      
+  while(Wire.available() < 2);      
+  green = (Wire.read() << 8) | (Wire.read() & 0xFF);
   
-  Wire.requestFrom(tcsAddr,6);      //Petición de 6 bytes empezando por la dirección a la que apunta accXYZ
-  while(Wire.available() < 6);      //Esperamos hasta leer 6 bytes del MPU6050
-  //Aclaración: Wire.read() lee bloques de 1 byte. Por tanto para leer 16bits leemos 2 bytes consecutivos
-  //para concatenarlos primero hacemos una lectura, después desplacamos el registro 8 bits y añadimos una segunda lectura con la operación "or" 
+  //leemos blue
+  Wire.beginTransmission(tcsAddr);
+  Wire.write(BDATAL | 0x80);               //Nos situamos en la dirección donde se empiezan a leer los colores               
+  Wire.endTransmission();
+  Wire.requestFrom(tcsAddr,2);      
+  while(Wire.available() < 2);      
+  blue =  (Wire.read() << 8) | (Wire.read() & 0xFF);
+  
+
+  Serial.println("Colors:");
+  Serial.print("Red: ");
+  Serial.println(red);
+  Serial.print("Green: ");
+  Serial.println(green);
+  Serial.print("Blue: ");
+  Serial.println(blue);
+  Serial.print("Clearance: ");
+  Serial.println(clearance);
+/*
   H_red = Wire.read();
   L_red = Wire.read(); 
   H_green = Wire.read();
@@ -58,7 +121,7 @@ void loop(){
   Serial.println(H_green);
   Serial.print("Blue: ");
   Serial.println(H_blue);
-
+*/
   delay(2000);
   
 }
