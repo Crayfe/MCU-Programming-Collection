@@ -69,15 +69,14 @@ void loop(){
   Wire.endTransmission();
   Wire.requestFrom(tcsAddr,2);      
   while(Wire.available() < 2);      
-  clearance =  (Wire.read() << 8) | (Wire.read() & 0xFF);
-
+  clearance =  ((Wire.read() & 0xFF)  << 8) | (Wire.read() & 0xFF);
   //leemos red
   Wire.beginTransmission(tcsAddr);
   Wire.write(RDATAL | 0x80);               //Nos situamos en la dirección donde se empiezan a leer los colores               
   Wire.endTransmission();
   Wire.requestFrom(tcsAddr,2);      
   while(Wire.available() < 2);      
-  red =  (Wire.read() << 8) | (Wire.read() & 0xFF);
+  red =  ((Wire.read() & 0xFF)  << 8) | (Wire.read() & 0xFF);
 
   //leemos green
    Wire.beginTransmission(tcsAddr);
@@ -85,7 +84,7 @@ void loop(){
   Wire.endTransmission();
   Wire.requestFrom(tcsAddr,2);      
   while(Wire.available() < 2);      
-  green = (Wire.read() << 8) | (Wire.read() & 0xFF);
+  green = ((Wire.read() & 0xFF)  << 8) | (Wire.read() & 0xFF);
   
   //leemos blue
   Wire.beginTransmission(tcsAddr);
@@ -93,7 +92,7 @@ void loop(){
   Wire.endTransmission();
   Wire.requestFrom(tcsAddr,2);      
   while(Wire.available() < 2);      
-  blue =  (Wire.read() << 8) | (Wire.read() & 0xFF);
+  blue =  ((Wire.read() & 0xFF)  << 8) | (Wire.read() & 0xFF);
   
 
   Serial.println("Colors:");
