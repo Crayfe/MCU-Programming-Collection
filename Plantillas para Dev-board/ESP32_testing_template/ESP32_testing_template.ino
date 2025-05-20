@@ -155,10 +155,10 @@ void loop() {
   //test_encoder();
   //test_buttons_state();
   //test_buttons_pulsed();
-  //test_display();
+  test_display();
   //test_tones();
   //test_tones_holded();
-  test_dht(true);
+  //test_dht(true);
   //delay(2000);
 }
 /*
