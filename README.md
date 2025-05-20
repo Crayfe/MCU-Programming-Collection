@@ -47,7 +47,7 @@ En esta colección de pruebas se intenta hacer un barrido general, abarcando car
 - test_DHTxx
 - test_DS18b20
 
-## Programación basada en Python
+## Tests microPython
 En este directorio se recopilan todos los programas de prueba destinado para plataformas basadas en Python, ya sean MicroPython o CircuitPython e independientemente del MCU empleado.
 
 ### Test codes
