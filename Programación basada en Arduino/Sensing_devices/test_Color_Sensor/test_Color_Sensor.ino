@@ -42,7 +42,7 @@ void setup(void){
   Wire.write(ENABLE | 0x80);
   Wire.write(ENABLE_PON);
   Wire.endTransmission();
-  delay(3)
+  delay(3);
   Wire.beginTransmission(tcsAddr);
   Wire.write(ENABLE | 0x80);
   Wire.write(ENABLE_PON | ENABLE_AEN);
