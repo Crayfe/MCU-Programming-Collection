@@ -1,5 +1,6 @@
-//Prueba y transmision de caracteres en funcion de un boton en la entrada con el modulo RF para Arduino http://www.crayfe-projects.blogspot.com.es
-//TRANSMISOR
+//Prueba de recepción y transmision del encendido y apagado de un LED con el modulo RF para Arduino
+//Para este test es necesario tener instalada la librería VirtualWire
+//test EMISOR
 #include <VirtualWire.h>
 void setup()
 {
