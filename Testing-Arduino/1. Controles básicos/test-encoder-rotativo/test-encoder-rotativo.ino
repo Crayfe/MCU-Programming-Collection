@@ -4,20 +4,6 @@
  * 
  * Pines para placa de pruebas (ESP32):
  * 
- 
- #define CLK_PIN 27
- #define DT_PIN 14
- #define SW_PIN 12
- 
- * 
- * Pines para Arduino UNO:
- * 
- 
-#define CLK_PIN 6
-#define DT_PIN 7
-#define SW_PIN 8
- 
- * 
  */
 
 #define CLK_PIN 27
